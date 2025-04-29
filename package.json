@@ -1,0 +1,69 @@
+{
+  "name": "monorepo-typescript-references",
+  "type": "module",
+  "version": "0.0.0",
+  "packageManager": "pnpm@10.10.0",
+  "description": "A CLI tool to update tsconfig.json references based on your monorepo structure",
+  "author": "ocavue <ocavue@gmail.com>",
+  "license": "MIT",
+  "funding": "https://github.com/sponsors/ocavue",
+  "homepage": "https://github.com/ocavue/monorepo-typescript-references#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ocavue/monorepo-typescript-references.git"
+  },
+  "bugs": "https://github.com/ocavue/monorepo-typescript-references/issues",
+  "keywords": [
+    "typescript",
+    "references",
+    "monorepo",
+    "tsconfig",
+    "pnpm",
+    "yarn",
+    "npm"
+  ],
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": "./dist/index.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*",
+        "./dist/index.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "lint": "eslint .",
+    "fix": "eslint --fix . && prettier --write .",
+    "prepublishOnly": "pnpm run build",
+    "typecheck": "tsc -b"
+  },
+  "devDependencies": {
+    "@ocavue/eslint-config": "^2.14.3",
+    "@ocavue/tsconfig": "^0.3.7",
+    "@types/node": "^22.15.3",
+    "eslint": "^9.25.1",
+    "prettier": "^3.5.3",
+    "tsdown": "^0.10.0",
+    "typescript": "^5.8.3"
+  },
+  "renovate": {
+    "extends": [
+      "github>ocavue/config-renovate"
+    ]
+  }
+}
