@@ -27,6 +27,12 @@ export async function checkTsconfigReferences(options: Options) {
     log(`- ${pkg.dir}: ${pkg.packageJson.name}`)
   }
 
+  if (packages.rootPackage) {
+    log(`Root package: ${packages.rootPackage.packageJson.name}`)
+  } else {
+    log('No root package found')
+  }
+
   const rootTsconfigFilePath = path.join(rootPath, options.rootConfigName)
 
   const rootTsconfig = await readTsconfig(rootTsconfigFilePath)
