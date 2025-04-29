@@ -16,71 +16,17 @@ interface Options {
 }
 
 export async function checkTsconfigReferences(options: Options) {
-  const rootPath: string = (await findRoot(process.cwd())).rootDir
-
-  log(`Updating tsconfig references in monorepo at ${rootPath}`)
-
-  const packages = await getPackages(rootPath)
-
-  log(`Found ${packages.packages.length} packages`)
-  for (const pkg of packages.packages) {
-    log(`- ${pkg.dir}: ${pkg.packageJson.name}`)
-  }
-
-  if (packages.rootPackage) {
-    log(`Root package: ${packages.rootPackage.packageJson.name}`)
-  } else {
-    log('No root package found')
-  }
-
-  const rootTsconfigFilePath = path.join(rootPath, options.rootConfigName)
-
-  const rootTsconfig = await readTsconfig(rootTsconfigFilePath)
-
-  const pkgToTsconfigFilePath = new Map<string, string>()
-  const pkgToTsconfig = new Map<string, TsConfigJson>()
-  const pkgToDependencies = new Map<string, string[]>()
-
-  if (packages.rootPackage) {
-    const rootPackageName = packages.rootPackage.packageJson.name
-    pkgToTsconfigFilePath.set(rootPackageName, rootTsconfigFilePath)
-    pkgToTsconfig.set(rootPackageName, rootTsconfig)
-    pkgToDependencies.set(
-      rootPackageName,
-      packages.packages.map((pkg) => pkg.packageJson.name),
-    )
-  }
-
-  await Promise.all(
-    packages.packages.map(async (pkg) => {
-      const pkgName: string = pkg.packageJson.name
-      pkgToDependencies.set(pkgName, [
-        ...Object.keys(pkg.packageJson.dependencies ?? {}),
-        ...Object.keys(pkg.packageJson.devDependencies ?? {}),
-        ...Object.keys(pkg.packageJson.peerDependencies ?? {}),
-      ])
-
-      const pkgTsconfigFilePath = path.join(pkg.dir, options.configName)
-      const pkgTsconfig = await maybeReadTsconfig(pkgTsconfigFilePath)
-      if (pkgTsconfig) {
-        pkgToTsconfigFilePath.set(pkgName, pkgTsconfigFilePath)
-        pkgToTsconfig.set(pkgName, pkgTsconfig)
-      }
-    }),
-  )
+  const packages = await analyzeProject(options)
 
   const needsUpdate: Record<string, string[]> = {}
 
   await Promise.all(
-    packages.packages.map(async (pkg) => {
-      const tsconfigFilePath = pkgToTsconfigFilePath.get(pkg.packageJson.name)
-      const tsconfig = pkgToTsconfig.get(pkg.packageJson.name)
-      if (!tsconfigFilePath || !tsconfig) {
-        return
-      }
-      const dependencies = pkgToDependencies.get(pkg.packageJson.name) || []
+    Array.from(packages.values()).map(async (pkg) => {
+      const tsconfigFilePath = pkg.tsconfigFilePath
+      const tsconfig = pkg.tsconfig
+      const dependencies = packages.get(pkg.name)?.dependencies ?? []
       const dependenciesTsconfigFilePaths: string[] = dependencies
-        .map((dependency) => pkgToTsconfigFilePath.get(dependency))
+        .map((dependency) => packages.get(dependency)?.tsconfigFilePath)
         .filter((x) => x != null)
       const references = dependenciesTsconfigFilePaths.map((filePath) =>
         relative(pkg.dir, filePath),
@@ -98,7 +44,93 @@ export async function checkTsconfigReferences(options: Options) {
     }),
   )
 
+  log(`Needs update: ${JSON.stringify(needsUpdate)}`)
+
   return needsUpdate
+}
+
+interface Package {
+  // The name of the package in package.json
+  name: string
+  // Whether the package is the root package
+  isRoot: boolean
+  // The absolute path to the package directory
+  dir: string
+  // The dependencies of the package (includes dependencies, devDependencies,
+  // and peerDependencies)
+  dependencies: string[]
+  // The absolute path to the tsconfig.json file
+  tsconfigFilePath: string
+  // tsconfig file content
+  tsconfig: TsConfigJson
+}
+
+export async function analyzeProject(
+  options: Options,
+): Promise<Map<string, Package>> {
+  const rootPath: string = (await findRoot(process.cwd())).rootDir
+
+  log(`Analyzing project at ${rootPath}`)
+
+  const packages = await getPackages(rootPath)
+
+  log(`Found ${packages.packages.length} packages`)
+  for (const pkg of packages.packages) {
+    log(`- ${pkg.dir}: ${pkg.packageJson.name}`)
+  }
+
+  if (packages.rootPackage) {
+    log(`Root package: ${packages.rootPackage.packageJson.name}`)
+  } else {
+    log('No root package found')
+  }
+
+  const allPackages = new Map<string, Package>()
+
+  if (packages.rootPackage) {
+    const rootTsconfigFilePath = path.join(rootPath, options.rootConfigName)
+    const rootTsconfig = await readTsconfig(rootTsconfigFilePath)
+    const rootPackageName = packages.rootPackage.packageJson.name
+    allPackages.set(rootPackageName, {
+      name: rootPackageName,
+      isRoot: true,
+      dir: packages.rootPackage.dir,
+      dependencies: packages.packages.map((pkg) => pkg.packageJson.name),
+      tsconfigFilePath: rootTsconfigFilePath,
+      tsconfig: rootTsconfig,
+    })
+  }
+
+  await Promise.all(
+    packages.packages.map(async (pkg) => {
+      const packageName: string = pkg.packageJson.name
+      const dependencies = [
+        ...Object.keys(pkg.packageJson.dependencies ?? {}),
+        ...Object.keys(pkg.packageJson.devDependencies ?? {}),
+        ...Object.keys(pkg.packageJson.peerDependencies ?? {}),
+      ]
+
+      const tsconfigFilePath = path.join(pkg.dir, options.configName)
+      const tsconfig = await maybeReadTsconfig(tsconfigFilePath)
+      if (tsconfig) {
+        allPackages.set(packageName, {
+          name: packageName,
+          isRoot: false,
+          dir: pkg.dir,
+          dependencies,
+          tsconfigFilePath,
+          tsconfig,
+        })
+      }
+    }),
+  )
+
+  log(`Analyze result:`)
+  for (const pkg of Object.values(allPackages)) {
+    log(`${JSON.stringify(pkg)}`)
+  }
+
+  return allPackages
 }
 
 async function readFile(filePath: string): Promise<string> {
