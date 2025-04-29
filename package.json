@@ -23,23 +23,8 @@
     "npm"
   ],
   "sideEffects": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": "./dist/index.js"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*",
-        "./dist/index.d.ts"
-      ]
-    }
+  "bin": {
+    "monorepo-typescript-references": "./dist/monorepo-typescript-references.js"
   },
   "files": [
     "dist"
@@ -52,14 +37,24 @@
     "prepublishOnly": "pnpm run build",
     "typecheck": "tsc -b"
   },
+  "dependencies": {
+    "@manypkg/find-root": "^2.2.3",
+    "@manypkg/get-packages": "^2.2.2",
+    "@stricli/core": "^1.1.2",
+    "debug": "^4.4.0",
+    "jsonc-parser": "^3.3.1"
+  },
   "devDependencies": {
     "@ocavue/eslint-config": "^2.14.3",
     "@ocavue/tsconfig": "^0.3.7",
+    "@types/debug": "^4.1.12",
     "@types/node": "^22.15.3",
     "eslint": "^9.25.1",
+    "path-type": "^6.0.0",
     "pkg-pr-new": "^0.0.43",
     "prettier": "^3.5.3",
     "tsdown": "^0.10.0",
+    "type-fest": "^4.40.1",
     "typescript": "^5.8.3"
   },
   "renovate": {
