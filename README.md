@@ -30,6 +30,57 @@ monorepo-typescript-references fix
 - `--configName`: Specify the name of the tsconfig file in each package (default: `tsconfig.json`)
 - `--rootConfigName`: Specify the name of the tsconfig file in the monorepo root (default: `tsconfig.json`)
 
+## How It Works
+
+Consider a monorepo with the following structure:
+
+```
+my-monorepo/
+├── apps/
+│   └── my-app/
+│       ├── package.json  # depends on @my-org/pkg-1 and @my-org/pkg-2
+│       └── tsconfig.json
+├── packages/
+│   ├── pkg-1/
+│   │   ├── package.json  # depends on @my-org/pkg-2
+│   │   └── tsconfig.json
+│   └── pkg-2/
+│       ├── package.json
+│       └── tsconfig.json
+└── package.json
+```
+
+When you run `monorepo-typescript-references fix`, it will update the tsconfig.json files to ensure proper TypeScript project references:
+
+```diff js
+// apps/my-app/tsconfig.json
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist"
+  },
++  "references": [
++    { "path": "../../packages/pkg-1" }
++    { "path": "../../packages/pkg-2" }
++  ]
+}
+```
+
+```diff js
+// packages/pkg-1/tsconfig.json
+{
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "./dist"
+  },
++  "references": [
++    { "path": "../pkg-2" }
++  ]
+}
+```
+
+This ensures TypeScript compiles the packages in the correct order based on the dependency graph.
+
 ## License
 
 MIT
