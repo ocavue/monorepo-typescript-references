@@ -174,7 +174,6 @@ export async function writeTsConfigReferences(
   log(`Writing tsconfig to ${tsconfigFilePath}`)
   let content = await readFile(tsconfigFilePath)
   content = modifyTsconfigReferences(content, references)
-  // content = formatTsconfig(content)
   await fs.writeFile(tsconfigFilePath, content)
 }
 
@@ -186,15 +185,10 @@ function modifyTsconfigReferences(
     content,
     ['references'],
     references.map((ref) => ({ path: ref })),
-    {},
+    { formattingOptions: { insertSpaces: true } },
   )
   return JSONC.applyEdits(content, edits)
 }
-
-// function formatTsconfig(content: string): string {
-//   const edits = JSONC.format(content, undefined, {})
-//   return JSONC.applyEdits(content, edits)
-// }
 
 function getTsconfigReferences(tsconfig: TsConfigJson): string[] {
   return (tsconfig?.references ?? []).map((ref) => ref.path)
