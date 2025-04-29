@@ -52,7 +52,7 @@ my-monorepo/
 
 When you run `monorepo-typescript-references fix`, it will update the tsconfig.json files to ensure proper TypeScript project references:
 
-```diff js
+```diff
 // apps/my-app/tsconfig.json
 {
   "compilerOptions": {
@@ -60,13 +60,13 @@ When you run `monorepo-typescript-references fix`, it will update the tsconfig.j
     "outDir": "./dist"
   },
 +  "references": [
-+    { "path": "../../packages/pkg-1" }
-+    { "path": "../../packages/pkg-2" }
++    { "path": "../../packages/pkg-1/tsconfig.json" }
++    { "path": "../../packages/pkg-2/tsconfig.json" }
 +  ]
 }
 ```
 
-```diff js
+```diff
 // packages/pkg-1/tsconfig.json
 {
   "compilerOptions": {
@@ -74,7 +74,7 @@ When you run `monorepo-typescript-references fix`, it will update the tsconfig.j
     "outDir": "./dist"
   },
 +  "references": [
-+    { "path": "../pkg-2" }
++    { "path": "../pkg-2/tsconfig.json" }
 +  ]
 }
 ```
