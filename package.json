@@ -38,7 +38,7 @@
     "typecheck": "tsc -b"
   },
   "dependencies": {
-    "@manypkg/find-root": "^2.2.3",
+    "@manypkg/find-root": "^3.0.0",
     "@manypkg/get-packages": "^2.2.2",
     "@stricli/core": "^1.1.2",
     "debug": "^4.4.0",
