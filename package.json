@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@manypkg/find-root": "^3.0.0",
-    "@manypkg/get-packages": "^2.2.2",
+    "@manypkg/get-packages": "^3.0.0",
     "@stricli/core": "^1.1.2",
     "debug": "^4.4.0",
     "jsonc-parser": "^3.3.1"
