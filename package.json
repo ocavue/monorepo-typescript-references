@@ -45,15 +45,15 @@
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
-    "@ocavue/eslint-config": "^2.15.1",
+    "@ocavue/eslint-config": "^3.1.0",
     "@ocavue/tsconfig": "^0.3.7",
     "@types/debug": "^4.1.12",
     "@types/node": "^22.15.3",
-    "eslint": "^9.25.1",
+    "eslint": "^9.28.0",
     "path-type": "^6.0.0",
-    "pkg-pr-new": "^0.0.43",
+    "pkg-pr-new": "^0.0.51",
     "prettier": "^3.5.3",
-    "tsdown": "^0.11.0",
+    "tsdown": "^0.12.5",
     "type-fest": "^4.41.0",
     "typescript": "^5.8.3"
   },
