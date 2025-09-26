@@ -81,6 +81,10 @@ When you run `monorepo-typescript-references fix`, it will update the tsconfig.j
 
 This ensures TypeScript compiles the packages in the correct order based on the dependency graph.
 
+## Similar Projects
+
+- [`nx`](https://github.com/nrwl/nx) provides built-in support for managing TypeScript project references in monorepo projects. See [their documentation](https://20.nx.dev/concepts/typescript-project-linking) for more details.
+
 ## License
 
 MIT
