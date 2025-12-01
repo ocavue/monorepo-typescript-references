@@ -49,12 +49,12 @@
     "@ocavue/tsconfig": "^0.6.1",
     "@types/debug": "^4.1.12",
     "@types/node": "^22.15.29",
-    "eslint": "^9.39.0",
+    "eslint": "^9.39.1",
     "path-type": "^6.0.0",
     "pkg-pr-new": "^0.0.61",
     "prettier": "^3.7.3",
     "tsdown": "^0.16.8",
-    "type-fest": "^4.41.0",
+    "type-fest": "^5.2.0",
     "typescript": "^5.9.3"
   },
   "renovate": {
