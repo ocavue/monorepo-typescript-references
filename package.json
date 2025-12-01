@@ -24,7 +24,7 @@
   ],
   "sideEffects": false,
   "bin": {
-    "monorepo-typescript-references": "./dist/monorepo-typescript-references.js"
+    "monorepo-typescript-references": "./dist/monorepo-typescript-references.mjs"
   },
   "files": [
     "dist"
