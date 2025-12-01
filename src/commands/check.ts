@@ -2,13 +2,15 @@ import { buildCommand } from '@stricli/core'
 
 import { checkTsconfigReferences } from '../helpers'
 
-import { type Flags, flags } from './shared'
+import { type Flags, flags, withDefaultFlags } from './shared'
 
 export const checkCommand = buildCommand({
   func: async (flags: Flags) => {
+    const { configName: configNames, rootConfigName: rootConfigNames } =
+      withDefaultFlags(flags)
     const needsUpdate = await checkTsconfigReferences({
-      configName: flags.configName,
-      rootConfigName: flags.rootConfigName,
+      configNames,
+      rootConfigNames,
     })
 
     if (Object.keys(needsUpdate).length > 0) {
