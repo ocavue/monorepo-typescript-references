@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/ocavue/monorepo-typescript-references/compare/v1.1.1...v1.1.2) (2026-05-30)
+
+
+### Bug Fixes
+
+* update dependencies ([#33](https://github.com/ocavue/monorepo-typescript-references/issues/33)) ([fb8ced9](https://github.com/ocavue/monorepo-typescript-references/commit/fb8ced93753c3799e1be217d216959bd6a67df51))
+
 ## [1.1.1](https://github.com/ocavue/monorepo-typescript-references/compare/v1.1.0...v1.1.1) (2025-12-01)
 
 
