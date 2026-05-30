@@ -41,13 +41,12 @@
     "@manypkg/find-root": "^3.1.0",
     "@manypkg/get-packages": "^3.1.0",
     "@stricli/core": "^1.2.4",
-    "debug": "^4.4.3",
-    "jsonc-parser": "^3.3.1"
+    "jsonc-parser": "^3.3.1",
+    "obug": "^2.1.1"
   },
   "devDependencies": {
     "@ocavue/eslint-config": "^4.5.9",
     "@ocavue/tsconfig": "^0.7.1",
-    "@types/debug": "^4.1.12",
     "@types/node": "^22.15.29",
     "eslint": "^10.0.0",
     "path-type": "^6.0.0",
