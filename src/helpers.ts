@@ -11,8 +11,8 @@ import type { TsConfigJson } from 'type-fest'
 import { log } from './log'
 
 interface Options {
-  rootConfigName: string
-  configName: string
+  rootConfigNames: string[]
+  configNames: string[]
 }
 
 export async function checkTsconfigReferences(options: Options) {
@@ -22,25 +22,36 @@ export async function checkTsconfigReferences(options: Options) {
 
   await Promise.all(
     Array.from(packages.values()).map(async (pkg) => {
-      const tsconfigFilePath = pkg.tsconfigFilePath
-      const tsconfig = pkg.tsconfig
       const dependencies = packages.get(pkg.name)?.dependencies ?? []
-      const dependenciesTsconfigFilePaths: string[] = dependencies
-        .map((dependency) => packages.get(dependency)?.tsconfigFilePath)
-        .filter((x) => x != null)
+
+      let dependenciesTsconfigFilePaths: string[] = []
+      for (const dependency of dependencies) {
+        const dependencyPackage = packages.get(dependency)
+        if (dependencyPackage) {
+          for (const tsconfig of dependencyPackage.tsconfigs) {
+            dependenciesTsconfigFilePaths.push(tsconfig.tsconfigFilePath)
+          }
+        }
+      }
+      dependenciesTsconfigFilePaths = Array.from(
+        new Set(dependenciesTsconfigFilePaths),
+      ).sort()
+
       const references = dependenciesTsconfigFilePaths.map((filePath) =>
         relative(pkg.dir, filePath),
       )
 
-      const updatedReferences = await updateTsconfigReferences(
-        tsconfigFilePath,
-        tsconfig,
-        references,
-      )
-      if (!updatedReferences) {
-        return
+      for (const tsconfig of pkg.tsconfigs) {
+        const updatedReferences = await updateTsconfigReferences(
+          tsconfig.tsconfigFilePath,
+          tsconfig.tsconfig,
+          references,
+        )
+        if (!updatedReferences) {
+          return
+        }
+        needsUpdate[tsconfig.tsconfigFilePath] = updatedReferences
       }
-      needsUpdate[tsconfigFilePath] = updatedReferences
     }),
   )
 
@@ -59,10 +70,13 @@ interface Package {
   // The dependencies of the package (includes dependencies, devDependencies,
   // and peerDependencies)
   dependencies: string[]
-  // The absolute path to the tsconfig.json file
-  tsconfigFilePath: string
-  // tsconfig file content
-  tsconfig: TsConfigJson
+  // An array of tsconfig files
+  tsconfigs: Array<{
+    // The absolute path to the tsconfig.json file
+    tsconfigFilePath: string
+    // The tsconfig file content as a JSON object
+    tsconfig: TsConfigJson
+  }>
 }
 
 export async function analyzeProject(
@@ -88,16 +102,17 @@ export async function analyzeProject(
   const allPackages = new Map<string, Package>()
 
   if (packages.rootPackage) {
-    const rootTsconfigFilePath = path.join(rootPath, options.rootConfigName)
-    const rootTsconfig = await readTsconfig(rootTsconfigFilePath)
+    const rootTsconfigFilePaths = options.rootConfigNames.map(
+      (rootConfigName) => path.join(rootPath, rootConfigName),
+    )
     const rootPackageName = packages.rootPackage.packageJson.name
+    const rootTsconfigs = await maybeReadManyTsconfigs(rootTsconfigFilePaths)
     allPackages.set(rootPackageName, {
       name: rootPackageName,
       isRoot: true,
       dir: packages.rootPackage.dir,
       dependencies: packages.packages.map((pkg) => pkg.packageJson.name),
-      tsconfigFilePath: rootTsconfigFilePath,
-      tsconfig: rootTsconfig,
+      tsconfigs: rootTsconfigs,
     })
   }
 
@@ -110,18 +125,20 @@ export async function analyzeProject(
         ...Object.keys(pkg.packageJson.peerDependencies ?? {}),
       ]
 
-      const tsconfigFilePath = path.join(pkg.dir, options.configName)
-      const tsconfig = await maybeReadTsconfig(tsconfigFilePath)
-      if (tsconfig) {
-        allPackages.set(packageName, {
-          name: packageName,
-          isRoot: false,
-          dir: pkg.dir,
-          dependencies,
-          tsconfigFilePath,
-          tsconfig,
-        })
+      const tsconfigFilePaths = options.configNames.map((configName) =>
+        path.join(pkg.dir, configName),
+      )
+      const tsconfigs = await maybeReadManyTsconfigs(tsconfigFilePaths)
+      if (tsconfigs.length === 0) {
+        return
       }
+      allPackages.set(packageName, {
+        name: packageName,
+        isRoot: false,
+        dir: pkg.dir,
+        dependencies,
+        tsconfigs: tsconfigs,
+      })
     }),
   )
 
@@ -141,9 +158,24 @@ async function readFile(filePath: string): Promise<string> {
   }
 }
 
-async function readTsconfig(filePath: string): Promise<TsConfigJson> {
-  const content = await readFile(filePath)
-  return JSONC.parse(content) as TsConfigJson
+async function maybeReadManyTsconfigs(
+  filePaths: string[],
+): Promise<Array<{ tsconfigFilePath: string; tsconfig: TsConfigJson }>> {
+  const tsconfigs: Array<{
+    tsconfigFilePath: string
+    tsconfig: TsConfigJson
+  }> = []
+
+  await Promise.all(
+    filePaths.map(async (filePath) => {
+      const tsconfig = await maybeReadTsconfig(filePath)
+      if (tsconfig) {
+        tsconfigs.push({ tsconfigFilePath: filePath, tsconfig })
+      }
+    }),
+  )
+
+  return tsconfigs
 }
 
 async function maybeReadTsconfig(
