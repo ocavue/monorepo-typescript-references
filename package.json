@@ -45,11 +45,11 @@
     "jsonc-parser": "^3.3.1"
   },
   "devDependencies": {
-    "@ocavue/eslint-config": "^3.6.3",
+    "@ocavue/eslint-config": "^4.5.9",
     "@ocavue/tsconfig": "^0.7.1",
     "@types/debug": "^4.1.12",
     "@types/node": "^22.15.29",
-    "eslint": "^9.39.1",
+    "eslint": "^10.0.0",
     "path-type": "^6.0.0",
     "pkg-pr-new": "^0.0.61",
     "prettier": "^3.7.3",
