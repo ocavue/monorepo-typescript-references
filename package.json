@@ -40,7 +40,7 @@
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
     "@manypkg/get-packages": "^3.1.0",
-    "@stricli/core": "^1.2.4",
+    "@stricli/core": "^1.2.7",
     "jsonc-parser": "^3.3.1",
     "obug": "^2.1.1"
   },
@@ -52,8 +52,8 @@
     "path-type": "^6.0.0",
     "pkg-pr-new": "^0.0.75",
     "prettier": "^3.7.3",
-    "tsdown": "^0.16.8",
-    "type-fest": "^5.2.0",
+    "tsdown": "^0.22.1",
+    "type-fest": "^5.6.0",
     "typescript": "^6.0.3"
   },
   "renovate": {
