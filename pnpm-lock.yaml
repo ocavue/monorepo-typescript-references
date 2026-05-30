@@ -28,8 +28,8 @@ importers:
         specifier: ^3.6.3
         version: 3.6.3(@types/estree@1.0.6)(@typescript-eslint/parser@8.48.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(@typescript-eslint/utils@8.48.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(jsonc-eslint-parser@2.4.0)(typescript@5.9.3)
       '@ocavue/tsconfig':
-        specifier: ^0.6.3
-        version: 0.6.3
+        specifier: ^0.7.1
+        version: 0.7.1
       '@types/debug':
         specifier: ^4.1.12
         version: 4.1.12
@@ -268,8 +268,8 @@ packages:
   '@ocavue/eslint-config@3.6.3':
     resolution: {integrity: sha512-h6xPP54VFZ9sT+9Zql92R40/4u7cRmfG97sjSb0sKJ0XQu1toBjSMz28idhxK8f6cqnhMzTg4NiBK8ISOsRx5Q==}
 
-  '@ocavue/tsconfig@0.6.3':
-    resolution: {integrity: sha512-pxCVe2UUbaXCzPvcyR4s355bpWlyqxECCnXVX0twPfJA2p3dSsdUz+F2QDdrRCEM7MRY9mxWRoA79/2phfbl0A==}
+  '@ocavue/tsconfig@0.7.1':
+    resolution: {integrity: sha512-jw1LPUqi/f043s61WOYEWWA6P1ZSSYXR3KJXcNxBXXrxiUXhEAbuEBUmi6Qs8NduIVU3xCkbaYw5BU3UyL3G3A==}
 
   '@octokit/action@6.1.0':
     resolution: {integrity: sha512-lo+nHx8kAV86bxvOVOI3vFjX3gXPd/L7guAUbvs3pUvnR2KC+R7yjBkA1uACt4gYhs4LcWP3AXSGQzsbeN2XXw==}
@@ -2548,7 +2548,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@ocavue/tsconfig@0.6.3': {}
+  '@ocavue/tsconfig@0.7.1': {}
 
   '@octokit/action@6.1.0':
     dependencies:
