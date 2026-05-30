@@ -55,10 +55,5 @@
     "tsdown": "^0.22.1",
     "type-fest": "^5.6.0",
     "typescript": "^6.0.3"
-  },
-  "renovate": {
-    "extends": [
-      "github>ocavue/config-renovate"
-    ]
   }
 }
