@@ -51,7 +51,7 @@
     "@types/node": "^22.15.29",
     "eslint": "^10.0.0",
     "path-type": "^6.0.0",
-    "pkg-pr-new": "^0.0.61",
+    "pkg-pr-new": "^0.0.75",
     "prettier": "^3.7.3",
     "tsdown": "^0.16.8",
     "type-fest": "^5.2.0",
