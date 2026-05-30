@@ -2,7 +2,7 @@
   "name": "monorepo-typescript-references",
   "type": "module",
   "version": "1.1.1",
-  "packageManager": "pnpm@10.24.0",
+  "packageManager": "pnpm@11.5.0",
   "description": "A CLI tool to update tsconfig.json references based on your monorepo structure",
   "author": "ocavue <ocavue@gmail.com>",
   "license": "MIT",
@@ -40,26 +40,20 @@
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
     "@manypkg/get-packages": "^3.1.0",
-    "@stricli/core": "^1.2.4",
-    "debug": "^4.4.3",
-    "jsonc-parser": "^3.3.1"
+    "@stricli/core": "^1.2.7",
+    "jsonc-parser": "^3.3.1",
+    "obug": "^2.1.1"
   },
   "devDependencies": {
-    "@ocavue/eslint-config": "^3.6.3",
-    "@ocavue/tsconfig": "^0.6.1",
-    "@types/debug": "^4.1.12",
+    "@ocavue/eslint-config": "^4.5.9",
+    "@ocavue/tsconfig": "^0.7.1",
     "@types/node": "^22.15.29",
-    "eslint": "^9.39.1",
+    "eslint": "^10.0.0",
     "path-type": "^6.0.0",
-    "pkg-pr-new": "^0.0.61",
+    "pkg-pr-new": "^0.0.75",
     "prettier": "^3.7.3",
-    "tsdown": "^0.16.8",
-    "type-fest": "^5.2.0",
-    "typescript": "^5.9.3"
-  },
-  "renovate": {
-    "extends": [
-      "github>ocavue/config-renovate"
-    ]
+    "tsdown": "^0.22.1",
+    "type-fest": "^5.6.0",
+    "typescript": "^6.0.3"
   }
 }

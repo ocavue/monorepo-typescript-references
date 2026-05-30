@@ -1,3 +1,3 @@
-import debug from 'debug'
+import { createDebug } from 'obug'
 
-export const log = debug('monorepo-typescript-references')
+export const log = createDebug('monorepo-typescript-references')

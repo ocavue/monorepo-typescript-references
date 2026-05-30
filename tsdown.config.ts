@@ -4,6 +4,7 @@ export default defineConfig({
   entry: {
     'monorepo-typescript-references': 'src/cli.ts',
   },
-  target: 'node12',
+  deps: { onlyBundle: ['path-type'] },
+  target: 'node18',
   format: ['esm'],
 })
