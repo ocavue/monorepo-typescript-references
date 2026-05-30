@@ -48,10 +48,10 @@
     "@ocavue/eslint-config": "^4.5.9",
     "@ocavue/tsconfig": "^0.7.1",
     "@types/node": "^22.15.29",
-    "eslint": "^10.0.0",
+    "eslint": "^10.4.0",
     "path-type": "^6.0.0",
     "pkg-pr-new": "^0.0.75",
-    "prettier": "^3.7.3",
+    "prettier": "^3.8.3",
     "tsdown": "^0.22.1",
     "type-fest": "^5.6.0",
     "typescript": "^6.0.3"
